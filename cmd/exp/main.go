@@ -1,12 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
-	"os"
+	"strings"
 )
 
 type User struct {
 	Name string
+	Age  int
+	Meta UserMeta
+}
+
+type UserMeta struct {
+	Visits int
 }
 
 func main() {
@@ -17,10 +24,19 @@ func main() {
 
 	user := User{
 		Name: "Ichigo Kurosaki",
+		Age:  19,
+		Meta: UserMeta{
+			Visits: 4,
+		},
 	}
 
-	err = t.Execute(os.Stdout, user)
+	// w := os.Stdout
+	var b strings.Builder
+	err = t.Execute(&b, user)
 	if err != nil {
 		panic(err)
 	}
+	out := b.String()
+	fmt.Println(out)
+
 }
