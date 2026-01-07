@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -57,25 +58,37 @@ func faqHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-type Router struct{}
+func ContactCtx(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		contactID := chi.URLParam(r, "contactID")
+		contact := fmt.Sprintf(`
+			<h1>You are looking for a contact</h1>
+			<p>The contact id is: %v
+			`, contactID)
+		ctx := context.WithValue(r.Context(), "contact", contact)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
 
-func (router Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.URL.Path {
-	case "/":
-		homeHandler(w, r)
-	case "/contact":
-		contactHandler(w, r)
-	case "/faq":
-		faqHandler(w, r)
-	default:
-		notFoundHandler(w, r)
-	}
+func getContact(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	contact := ctx.Value("contact")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprint(w, contact)
 }
 
 func main() {
 	r := chi.NewRouter()
 	r.Get("/", homeHandler)
-	r.Get("/contact", contactHandler)
+	r.Route("/contact", func(r chi.Router) {
+		r.Get("/", contactHandler)
+
+		r.Route("/{contactID}", func(r chi.Router) {
+			r.Use(ContactCtx)
+			r.Get("/", getContact)
+		})
+	})
+	// r.Get("/contact", contactHandler)
 	r.Get("/faq", faqHandler)
 	r.NotFound(notFoundHandler)
 	fmt.Println("Starting the server on :3000...")
