@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"html/template"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -11,7 +12,12 @@ import (
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, "<h1>Welcome to this site!</h1>")
+	t, err := template.ParseFiles("templates/home.gohtml")
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprint(w, "<p>Resource not found</p>")
+	}
+	err = t.Execute(w, nil)
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +28,10 @@ func contactHandler(w http.ResponseWriter, r *http.Request) {
 	</p>
 		`)
 }
+
+// func resourceNotFound(w http.ResponseWriter) {
+// 	w.WriteHeader(http.StatusNotFound)
+// }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
