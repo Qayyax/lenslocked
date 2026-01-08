@@ -11,6 +11,11 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+type User struct {
+	Name  string
+	Email string
+}
+
 // Parses html template based on the filepath passed
 func executeTemplate(w http.ResponseWriter, filepath string) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -21,7 +26,13 @@ func executeTemplate(w http.ResponseWriter, filepath string) {
 		fmt.Fprint(w, "<p>There was an error parsing the template.</p")
 		return
 	}
-	err = t.Execute(w, nil)
+
+	user := User{
+		Name:  "Tife",
+		Email: "qayyax@gmail.com",
+	}
+
+	err = t.Execute(w, user)
 	if err != nil {
 		log.Printf("Parsing template: %v", err)
 		http.Error(w, "<p>There was an error parsing the template.</p>", http.StatusInternalServerError)
