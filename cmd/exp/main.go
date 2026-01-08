@@ -10,6 +10,7 @@ type User struct {
 	Name string
 	Age  int
 	Meta UserMeta
+	Bio  string
 }
 
 type UserMeta struct {
@@ -28,6 +29,7 @@ func main() {
 		Meta: UserMeta{
 			Visits: 4,
 		},
+		Bio: `<script>alert("haha, you have been h4x0r3d!")</script>`,
 	}
 
 	// w := os.Stdout
