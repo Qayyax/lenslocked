@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -14,24 +15,35 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	t, err := template.ParseFiles("templates/home.gohtml")
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprint(w, "<p>Resource not found</p>")
+		log.Printf("Parsing template: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, "<p>There was an error parsing the template.</p")
+		return
 	}
 	err = t.Execute(w, nil)
+	if err != nil {
+		log.Printf("Parsing template: %v", err)
+		http.Error(w, "<p>There was an error parsing the template.</p>", http.StatusInternalServerError)
+		return
+	}
 }
 
 func contactHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, `
-<h1>Contact Page</h1>
-		<p>To get in touch, email me at <a href="mailto:qayyax@gmail.com">qayyax@gmail.com</a>
-	</p>
-		`)
-}
+	t, err := template.ParseFiles("templates/contact.gohtml")
 
-// func resourceNotFound(w http.ResponseWriter) {
-// 	w.WriteHeader(http.StatusNotFound)
-// }
+	if err != nil {
+		log.Printf("Parsing template: %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, "<h1>There was an internal server error</h1>")
+	}
+	err = t.Execute(w, nil)
+	if err != nil {
+		log.Printf("Parsing template error: %v", err)
+		http.Error(w, "<p>There was an error parsing the template.</p>", http.StatusInternalServerError)
+		return
+	}
+}
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
