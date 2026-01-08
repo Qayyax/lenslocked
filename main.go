@@ -57,27 +57,20 @@ func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 
 func faqHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	faqContent := `
-	<h1>FAQ Page</h1>
-
-	<section>
-		<article>
-			<p><span style="font-weight:bold;">Q:</span> Is there a free version?</p>
-			<p><span style="font-weight:bold;">A:</span> Yes! We offer a free trial for 30 days on any paid plans.</p>
-		</article>
-
-		<article>
-			<p><span style="font-weight:bold;">Q:</span> What are you support hours?</p>
-			<p><span style="font-weight:bold;">A:</span> We have support staff answering email 24/7, though response times may be a bit slower on weekends.</p>
-		</article>
-
-		<article>
-			<p><span style="font-weight:bold;">Q:</span> How do I contact support?</p>
-	<p><span style="font-weight:bold;">A:</span> Email us - <a href="mailto:support@lenslocked.com">support@lenslocked.com</a></p>
-		</article>
-	</section>
-	`
-	fmt.Fprint(w, faqContent)
+	t, err := template.ParseFiles("templates/faq.gohtml")
+	if err != nil {
+		log.Printf("Error parsing file %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, "<p>There was an internal server error</p>")
+		return
+	}
+	err = t.Execute(w, nil)
+	if err != nil {
+		log.Printf("Error parsing file %v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, "<p>There was an internal server error</p>")
+		return
+	}
 
 }
 
