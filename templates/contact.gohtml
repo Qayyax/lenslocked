@@ -4,9 +4,20 @@
 <p> I am {{.Age}} years old </p>
 <p>I weight {{.Weight}}kg</p>
 
+<hr>
+
 <h2>Here is some information about my school</h2>
 <p>The name of my school is {{.School.name}}</p>
 <p>My school is located at {{.School.location}}</p>
+
+<hr>
+<h2>Here are some of the animes I have watched</h2>
+<ul>
+  {{range .AnimeList}}
+    <li>{{.}}</li>
+  {{end}}
+</ul>
+
 
 
 

@@ -12,11 +12,12 @@ import (
 )
 
 type User struct {
-	Name   string
-	Email  string
-	Age    int
-	Weight float32
-	School map[string]string
+	Name      string
+	Email     string
+	Age       int
+	Weight    float32
+	School    map[string]string
+	AnimeList []string
 }
 
 // Parses html template based on the filepath passed
@@ -51,6 +52,7 @@ func executeTemplate(w http.ResponseWriter, filepath string) {
 			"name":     "Trent University",
 			"location": "Peterborough, ON",
 		},
+		AnimeList: []string{"Bleach", "One Piece", "Naruto", "Dragonball", "Full Metal Alchemist", "Jujutsu Kaizen"},
 	}
 
 	err = t.Execute(w, user)
