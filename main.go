@@ -12,8 +12,11 @@ import (
 )
 
 type User struct {
-	Name  string
-	Email string
+	Name   string
+	Email  string
+	Age    int
+	Weight float32
+	School map[string]string
 }
 
 // Parses html template based on the filepath passed
@@ -27,9 +30,27 @@ func executeTemplate(w http.ResponseWriter, filepath string) {
 		return
 	}
 
+	// <!-- such as: -->
+	// <!-- Intergers  Age int -->
+	// <!-- Floats  Weight float32 -->
+	// <!-- maps "school" [string]string
+	// school.Name string
+	// school.Location string
+	// school.graduationDate string
+	// -->
+	// <!-- slices
+	// anime list
+	// ["Bleach", "One Piece", "Naruto", "Dragonball", "Full Metal Alchemist", "Jujutsu Kaizen"]
+	// -->
 	user := User{
-		Name:  "Tife",
-		Email: "qayyax@gmail.com",
+		Name:   "Tife",
+		Email:  "qayyax@gmail.com",
+		Age:    26,
+		Weight: 80,
+		School: map[string]string{
+			"name":     "Trent University",
+			"location": "Peterborough, ON",
+		},
 	}
 
 	err = t.Execute(w, user)

@@ -1,19 +1,28 @@
 <h1>Contact Page</h1>
 <p>My name is {{.Name}}</p>
 <p>To get in touch, email me at <a href="mailto:{{.Email}}">{{.Email}}</a></p>
+<p> I am {{.Age}} years old </p>
+<p>I weight {{.Weight}}kg</p>
 
-<!-- Add new fields, and then show in html templates -->
-<!-- User field -->
-<!-- name:  -->
-<!-- email: -->
+<h2>Here is some information about my school</h2>
+<p>The name of my school is {{.School.name}}</p>
+<p>My school is located at {{.School.location}}</p>
+
 
 
 <!-- Experiment with different data types -->
 <!-- such as: -->
-<!-- Intergers  -->
-<!-- Floats  -->
-<!-- maps  -->
-<!-- slices -->
+<!-- Intergers  Age int --> 
+<!-- Floats  Weight float32 -->
+<!-- maps "school" [string]string
+school.Name string
+school.Location string
+school.graduationDate string
+-->
+<!-- slices 
+anime list
+["Bleach", "One Piece", "Naruto", "Dragonball", "Full Metal Alchemist", "Jujutsu Kaizen"]
+-->
 
 <!-- Try to add nested data and access it -->
 <!---->
