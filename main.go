@@ -31,20 +31,8 @@ func executeTemplate(w http.ResponseWriter, filepath string) {
 		return
 	}
 
-	// <!-- such as: -->
-	// <!-- Intergers  Age int -->
-	// <!-- Floats  Weight float32 -->
-	// <!-- maps "school" [string]string
-	// school.Name string
-	// school.Location string
-	// school.graduationDate string
-	// -->
-	// <!-- slices
-	// anime list
-	// ["Bleach", "One Piece", "Naruto", "Dragonball", "Full Metal Alchemist", "Jujutsu Kaizen"]
-	// -->
 	user := User{
-		Name:   "Tife",
+		Name:   "Tife O",
 		Email:  "qayyax@gmail.com",
 		Age:    26,
 		Weight: 80,

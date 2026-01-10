@@ -1,5 +1,18 @@
+<!-- Try to add an if/else statement inside your template -->
+<!---->
+<!-- eg -->
+<!---->
+<!-- if user.Name == "Jon" { -->
+<!-- // render somthing -->
+<!-- } else { -->
+<!-- // render something else -->
+<!-- } -->
 <h1>Contact Page</h1>
-<p>My name is {{.Name}}</p>
+{{if eq .Name "Tife"}}
+  <p>My name is {{.Name}}</p>
+{{else}}
+  <p>My name is not {{.Name}}</p>
+{{end}}
 <p>To get in touch, email me at <a href="mailto:{{.Email}}">{{.Email}}</a></p>
 <p> I am {{.Age}} years old </p>
 <p>I weight {{.Weight}}kg</p>
@@ -17,32 +30,3 @@
     <li>{{.}}</li>
   {{end}}
 </ul>
-
-
-
-
-<!-- Experiment with different data types -->
-<!-- such as: -->
-<!-- Intergers  Age int --> 
-<!-- Floats  Weight float32 -->
-<!-- maps "school" [string]string
-school.Name string
-school.Location string
-school.graduationDate string
--->
-<!-- slices 
-anime list
-["Bleach", "One Piece", "Naruto", "Dragonball", "Full Metal Alchemist", "Jujutsu Kaizen"]
--->
-
-<!-- Try to add nested data and access it -->
-<!---->
-<!-- Try to add an if/else statement inside your template -->
-<!---->
-<!-- eg -->
-<!---->
-<!-- if user.Name == "Jon" { -->
-<!-- // render somthing -->
-<!-- } else { -->
-<!-- // render something else -->
-<!-- } -->
