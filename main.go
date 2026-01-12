@@ -26,7 +26,7 @@ func executeTemplate(w http.ResponseWriter, filepath string) {
 		Name:   "Tife O",
 		Email:  "qayyax@gmail.com",
 		Age:    26,
-		Weight: 80,
+		Weight: 175,
 		School: map[string]string{
 			"name":     "Trent University",
 			"location": "Peterborough, ON",
