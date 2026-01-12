@@ -3,12 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"html/template"
-	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/qayyax/lenslock/views"
 )
 
 type User struct {
@@ -22,13 +21,6 @@ type User struct {
 
 // Parses html template based on the filepath passed
 func executeTemplate(w http.ResponseWriter, filepath string) {
-	t, err := template.ParseFiles(filepath)
-	if err != nil {
-		log.Printf("Parsing template: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, "<p>There was an error parsing the template.</p")
-		return
-	}
 
 	user := User{
 		Name:   "Tife O",
@@ -42,12 +34,16 @@ func executeTemplate(w http.ResponseWriter, filepath string) {
 		AnimeList: []string{"Bleach", "One Piece", "Naruto", "Dragonball", "Full Metal Alchemist", "Jujutsu Kaizen"},
 	}
 
-	err = t.Execute(w, user)
+	// viewTpl := views.Template{
+	// 	HTMLTpl: tpl,
+	// }
+	// viewTpl.Execute(w, user)
+	viewTpl, err := views.Parse(filepath)
 	if err != nil {
-		log.Printf("Parsing template: %v", err)
-		http.Error(w, "<p>There was an error parsing the template.</p>", http.StatusInternalServerError)
+		fmt.Fprint(w, err)
 		return
 	}
+	viewTpl.Execute(w, user)
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
