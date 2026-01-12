@@ -1,4 +1,4 @@
-module example.com/lenslock
+module github.com/qayyax/lenslock
 
 go 1.25.1
 
