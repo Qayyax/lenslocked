@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/qayyax/lenslock/controllers"
 	"github.com/qayyax/lenslock/views"
 )
 
@@ -44,14 +45,6 @@ func executeTemplate(w http.ResponseWriter, filepath string) {
 	viewTpl.Execute(w, user)
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	executeTemplate(w, "templates/home.gohtml")
-}
-
-func contactHandler(w http.ResponseWriter, r *http.Request) {
-	executeTemplate(w, "templates/contact.gohtml")
-}
-
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -59,11 +52,6 @@ func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 		<h1>Page you are looking for does not exist</h1>
 		<p>Click <a href="/">here</a> to return to home</p>
 		`)
-
-}
-
-func faqHandler(w http.ResponseWriter, r *http.Request) {
-	executeTemplate(w, "templates/faq.gohtml")
 
 }
 
@@ -88,10 +76,16 @@ func getContact(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	r := chi.NewRouter()
-	// r.Use(middleware.Logger)
-	r.Get("/", homeHandler)
+
+	t, _ := views.Parse("templates/home.gohtml")
+	homeController := controllers.StaticController(t)
+	r.Get("/", homeController)
+
+	t, _ = views.Parse("templates/contact.gohtml")
+	contactController := controllers.StaticController(t)
+
 	r.Route("/contact", func(r chi.Router) {
-		r.Get("/", contactHandler)
+		r.Get("/", contactController)
 
 		r.Route("/{contactID}", func(r chi.Router) {
 			r.Use(middleware.Logger)
@@ -99,8 +93,9 @@ func main() {
 			r.Get("/", getContact)
 		})
 	})
-	// r.Get("/contact", contactHandler)
-	r.Get("/faq", faqHandler)
+	t, _ = views.Parse("templates/faq.gohtml")
+	faqController := controllers.StaticController(t)
+	r.Get("/faq", faqController)
 	r.NotFound(notFoundHandler)
 	fmt.Println("Starting the server on :3000...")
 	http.ListenAndServe(":3000", r)
