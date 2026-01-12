@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -34,13 +35,10 @@ func executeTemplate(w http.ResponseWriter, filepath string) {
 		AnimeList: []string{"Bleach", "One Piece", "Naruto", "Dragonball", "Full Metal Alchemist", "Jujutsu Kaizen"},
 	}
 
-	// viewTpl := views.Template{
-	// 	HTMLTpl: tpl,
-	// }
-	// viewTpl.Execute(w, user)
 	viewTpl, err := views.Parse(filepath)
 	if err != nil {
-		fmt.Fprint(w, err)
+		log.Printf("parsing template: %v", err)
+		http.Error(w, "There was an error parsing the template.", http.StatusInternalServerError)
 		return
 	}
 	viewTpl.Execute(w, user)
